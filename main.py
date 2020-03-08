@@ -1,12 +1,11 @@
 import os
 from manageData.extractionMessages import *
-import manageData.extractionMessages
 import time
+import json
 
-#list of messages, for example messages2.html
-messages = os.listdir('/Users/stefanoraimondousai/Documents/ReadingCourse/Unic_NPLProject/Files')
+messages = os.listdir('Files')
 start= time.time()
-path = "/Users/stefanoraimondousai/Documents/ReadingCourse/Unic_NPLProject/Files/"
+path = "Files/"
 
 user1 = 'Marta Pibiri'
 
@@ -16,13 +15,10 @@ setWords = createSetWords(messages, path, user1, user2)
 
 u = 0
 end=time.time()
-
-
-print(setWords.get(user1))
 print(end-start)
-"""
-listClearWords = createClearList(setWords.get(user1))
-print(listClearWords)
-"""
+if not (os.path.exists('Documents/')):
+    os.mkdir('Documents')
 
+with open('Documents/documents.json', 'w') as outfile:
+    json.dump(setWords, outfile)
 
