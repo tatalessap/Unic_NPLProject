@@ -4,15 +4,22 @@ import re
 
 def createSetWords(messages, path, user1, user2):
     setWords = {user1: [], user2: []}
-
+    flag = 0
     for file in messages:
         soup = BeautifulSoup(open(path + file), "html.parser")
 
-        for i, divText in enumerate(soup.findAll("div")):
-            if user1 in divText.text:
-                setWords.get(user1).append(divText.text)
-            elif user2 in divText.text:
-                setWords.get(user2).append(divText.text)
+        for i, div in enumerate(soup.findAll("div")):
+
+            if user1 in div.text:
+                flag = 1
+            if user2 in div.text:
+                flag = 0
+
+            t = re.sub(r'(?<!\.)\n', '', div.text)
+            t = re.sub(r'       ', '', t)
+            if div.attrs.get('class')[0] == 'text':
+                setWords.get(user1).append(t) if flag == 1 else setWords.get(user1).append(t)
+
     return setWords
 
 """
