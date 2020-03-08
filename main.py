@@ -1,23 +1,27 @@
 import os
-from manageData.extractionMessages import *
-import manageData.extractionMessages
+from manageData.toCreateSetWords import *
 
 #list of messages, for example messages2.html
 messages = os.listdir('/home/tatalessap/PycharmProjects/NPLProject/Files')
 
-path = "/home/tatalessap/PycharmProjects/Prova1/ChatExport_02_03_2020/"
+pathMessages = "/home/tatalessap/PycharmProjects/Prova1/ChatExport_02_03_2020/"
 
 user1 = 'Marta Pibiri'
 
 user2 = 'Stefano Raimondo Usa'
 
-setWords = createSetWords(messages, path, user1, user2)
+listRemoveElements = ['MP', 'S']
 
-u = 0
+nameFileText = "Output.txt"
 
-"""
-listClearWords = createClearList(setWords.get(user1))
-print(listClearWords)
-"""
+#createFileWords(messages, pathMessages, nameFileText)
 
+setWords = createDocWords(nameFileText, user1, user2)
+
+clearList = createClearList(setWords.get(user1), listRemoveElements)
+
+wordsFile = open("Words.txt", "w")
+for el in clearList:
+    wordsFile.write(el + "\n")
+wordsFile.close()
 
