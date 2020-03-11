@@ -4,15 +4,19 @@ from manageData.toCreateSetWords import *
 Input to set, variables and name of files
 """
 #list of messages, for example messages2.html
-messages = os.listdir('/home/tatalessap/PycharmProjects/NPLProject/Files')
+pathMessages = '/home/tatalessap/PycharmProjects/NPLProject/Files'
 
-pathMessages = "/home/tatalessap/PycharmProjects/Prova1/ChatExport_02_03_2020/"
+messages = os.listdir(pathMessages)
 
-user1 = 'Marta Pibiri'
+pathMessages = "/home/tatalessap/PycharmProjects/NPLProject/Files"
+
+user1 = 'Tata'
 
 user2 = 'Stefano Raimondo Usa'
 
 nameFileText = "Output.txt"
+
+listToEliminateSymbols = ['http', '/', '-', '😂']
 
 ##
 
@@ -21,7 +25,7 @@ if not os.path.isfile("/home/tatalessap/PycharmProjects/NPLProject/"+nameFileTex
 
 setWords = createDocWords(nameFileText, user1, user2)
 
-clearList = createClearList(setWords.get(user1))
+clearList = createClearList(setWords.get(user1), listToEliminateSymbols)
 
 wordsFile = open("Words.txt", "w")
 for el in clearList:
