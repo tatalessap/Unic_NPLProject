@@ -60,8 +60,10 @@ def createClearList(setUser, listToEliminateSymbols):
     for el in listToEliminateSymbols:
         listClearWords = list(filter(lambda x: not (el in x), listClearWords))
 
+    listClearWords = list(filter(lambda x: x !='', listClearWords))
     listClearWords = list(filter(lambda x: not (len(x) == 1), listClearWords))
     listClearWords = list(filter(lambda x: not (len(x) > 26), listClearWords))
+
 
     return listClearWords
 
