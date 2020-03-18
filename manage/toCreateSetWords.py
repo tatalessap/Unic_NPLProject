@@ -3,12 +3,15 @@ import re
 import os
 import re
 import string
+import json
 
 """
 @:parameter messages: the name of the file, with the messages in html
 @:parameter path: position of the files
 @:parameter nameFileText: the name of the file where we save the messages
 """
+
+
 def createFileWords(messages, path, nameFileText):
     for file in messages:
         soup = BeautifulSoup(open(path + '/' + file), "html.parser") #use soup for search and analyze the messages
@@ -17,6 +20,7 @@ def createFileWords(messages, path, nameFileText):
             if divText.attrs.get('class')[0] == 'text' or divText.attrs.get('class')[0] == 'from_name':
                 t = re.sub(r'(?<!\.)', '', divText.text)
                 t = re.sub(r'       ', '', t)
+                #t = str(t, "utf-8")
                 messagesFile.write(t + "\n")
     messagesFile.close()
 
@@ -83,6 +87,15 @@ def totalSplit(word):
             listWords = union(listWords, clearList)
     return listWords
 
+
+def extractWordsByJson(path):
+    data: dict
+    listWords =[]
+    with open(path) as f:
+      data = json.load(f)
+    for k in data.keys():
+        listWords = union(listWords, data.get(k))
+    return listWords
 
 def union(lst1, lst2):
     final_list = list(set(lst1) | set(lst2))

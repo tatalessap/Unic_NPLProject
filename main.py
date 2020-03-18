@@ -1,58 +1,50 @@
 import os
 import json
-from manageData.toCreateSetWords import *
-from manageData.toManageData import *
+from manage.toCreateSetWords import *
+from manage.toManageData import *
+
+
 """
 Input to set, variables and name of files
 """
 #list of messages, for example messages2.html
-pathMessages = '/home/tatalessap/PycharmProjects/NPLProject/Files'
+path = '/home/tatalessap/PycharmProjects/NPLProject/'
 
-messages = os.listdir(pathMessages)
+pathMessages = 'Files'
 
-pathMessages = "/home/tatalessap/PycharmProjects/NPLProject/Files"
+messages = os.listdir(path+pathMessages)
+
+fileWiki = "documents.json"
 
 user1 = 'Tata'
 
 user2 = 'Stefano Raimondo Usa'
 
-nameFileText = "Output.txt"
+fileNameTextOut = "Output.txt"
 
 listToEliminateSymbols = ['http', '/', '-', '😂', '\'', 'è', 'à', 'ù', 'ò']
 
-##
+if not os.path.isfile(path+fileNameTextOut):
+    createFileWords(messages, path+pathMessages, fileNameTextOut)
 
-if not os.path.isfile("/home/tatalessap/PycharmProjects/NPLProject/"+nameFileText):
-    createFileWords(messages, pathMessages, nameFileText)
-
-setWords = createDocWords(nameFileText, user1, user2)
+setWords = createDocWords(fileNameTextOut, user1, user2)
 
 clearList = createClearList(setWords.get(user1), listToEliminateSymbols)
 
-createFileJson(clearList)
+nameFileMessages = 'wordsByLen.json'
 
-with open('/home/tatalessap/PycharmProjects/NPLProject/wordsByLen.json') as f:
-  data = json.load(f)
+if not os.path.isfile(path+nameFileMessages):
+    createFileJson(clearList, 'wordsByLen.json')
 
+wikiList = extractWordsByJson(path+fileWiki)
 
-"""
+nameFileWiki = 'wordsByLenWiki.json'
 
-maxiMatrixSim = createMatrixSimByDic(data)
+if not os.path.isfile(path+'wordsByLenWiki.json'):
+    createFileJson(wikiList, 'wordsByLenWiki.json')
 
-sortedSavedJson(maxiMatrixSim, 'matrixSim.json')
+createSetNotCorrectWords(path, nameFileMessages, nameFileWiki)
 
-"""
-
-
-
-i = 0
-
-"""
-wordsFile = open("Words.txt", "w")
-for el in clearList:
-    wordsFile.write(el + "\n")
-wordsFile.close()
-"""
 
 
 
