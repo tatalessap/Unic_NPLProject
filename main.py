@@ -14,36 +14,51 @@ pathMessages = 'Files'
 
 messages = os.listdir(path+pathMessages)
 
-fileWiki = "documents.json"
+nameFileWiki = "documents2.json"
 
 user1 = 'Tata'
 
 user2 = 'Stefano Raimondo Usa'
 
-fileNameTextOut = "Output.txt"
+nameFileOutput = "Output.txt"
+
+nameFileWordsCommon = "60000_parole_italiane.txt"
+
+nameFileMessagesJson = 'wordsByLen.json'
+
+nameFileWordsCommonJson = 'wordsByLenCommon.json'
+
+nameFileWikiJson = 'wordsByLenWiki.json'
+
+nameFileTotal = "totalWords.json"
 
 listToEliminateSymbols = ['http', '/', '-', '😂', '\'', 'è', 'à', 'ù', 'ò']
 
-if not os.path.isfile(path+fileNameTextOut):
-    createFileWords(messages, path+pathMessages, fileNameTextOut)
-
-setWords = createDocWords(fileNameTextOut, user1, user2)
-
+#create a set by conversation by telegram
+if not os.path.isfile(path+nameFileOutput):
+    createFileWords(messages, path+pathMessages, nameFileOutput)
+#create the doc
+setWords = createDocWords(nameFileOutput, user1, user2)
+#create a list by user (list of words)
 clearList = createClearList(setWords.get(user1), listToEliminateSymbols)
 
-nameFileMessages = 'wordsByLen.json'
+if not os.path.isfile(path+nameFileTotal):
+    # if not exist, create a json with words order by their length
+    if not os.path.isfile(path + nameFileMessagesJson):
+        createFileJson(clearList, nameFileMessagesJson)
 
-if not os.path.isfile(path+nameFileMessages):
-    createFileJson(clearList, 'wordsByLen.json')
+    if not os.path.isfile(path + nameFileWikiJson):
+        createFileJson(extractWordsByJson(path+nameFileWiki), nameFileWikiJson)
 
-wikiList = extractWordsByJson(path+fileWiki)
+    if not os.path.isfile(path + nameFileWordsCommonJson):
+        createFileJson(createDocWordsText(path + nameFileWordsCommon), nameFileWordsCommonJson)
+        sortedSavedJson(unionFileJson(path+nameFileWikiJson, path + nameFileWordsCommonJson), nameFileTotal)
 
-nameFileWiki = 'wordsByLenWiki.json'
+createListBadWords(path, nameFileMessagesJson, nameFileTotal)
 
-if not os.path.isfile(path+'wordsByLenWiki.json'):
-    createFileJson(wikiList, 'wordsByLenWiki.json')
+#createSetNotCorrectWords(path, nameFileMessagesJson, 'wordsByLenWiki.json')
 
-createSetNotCorrectWords(path, nameFileMessages, nameFileWiki)
+
 
 
 

@@ -1,17 +1,15 @@
 from bs4 import BeautifulSoup
-import re
-import os
+from manage.utilis import *
 import re
 import string
 import json
+
 
 """
 @:parameter messages: the name of the file, with the messages in html
 @:parameter path: position of the files
 @:parameter nameFileText: the name of the file where we save the messages
 """
-
-
 def createFileWords(messages, path, nameFileText):
     for file in messages:
         soup = BeautifulSoup(open(path + '/' + file), "html.parser") #use soup for search and analyze the messages
@@ -97,6 +95,6 @@ def extractWordsByJson(path):
         listWords = union(listWords, data.get(k))
     return listWords
 
-def union(lst1, lst2):
-    final_list = list(set(lst1) | set(lst2))
-    return final_list
+
+
+
