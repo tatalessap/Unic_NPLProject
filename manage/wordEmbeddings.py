@@ -79,3 +79,4 @@ def createCorpusFromCleanText(clean_text, name='clean_text.txt'):
     with open(name, 'w') as f:
         for m in clean_text:
             f.writelines(m)
+            
