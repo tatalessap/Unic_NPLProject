@@ -8,9 +8,13 @@ import json
 import logging
 
 class Model:
-
-    def __init__(self, pathCorpus):
-        self.model = self.createModel(pathCorpus)
+    """path è la stringa che indica o il corpus su cui lavorare o il modello da caricare """
+    def __init__(self, path, existModel=False ):
+        """se abbiamo il modello pronto existModel va segnato a true"""
+        if existModel == False:
+            self.model = self.createModel(path)
+        else:
+            self.model = Word2Vec.load(path)
 
 
     def createModel(self, pathCorpus, min_count=5,  size=300, workers=8,  window=5,  iter=5, sg=1, negative=10):
