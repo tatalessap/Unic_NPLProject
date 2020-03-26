@@ -70,7 +70,7 @@ def cleanTextBadWord(text, key, badWord):
     return clean_text
 
 
-def createCorpus(clean_text, name='clean_text.txt'):
+def createCorpusFromCleanText(clean_text, name='clean_text.txt'):
 
     with open(name, 'w') as f:
         for m in clean_text:
