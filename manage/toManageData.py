@@ -17,7 +17,7 @@ def getDistanceLevenshtein(word, listEl):
 
     for el in listEl:
         d = Levenshtein.distance(str(word), str(el))
-        if d < minDistance:
+        if d < 3:
             minDistance.append(d)
             minWords.append(el)
 

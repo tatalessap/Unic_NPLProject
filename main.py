@@ -12,7 +12,7 @@ if not os.path.isfile('/home/tatalessap/PycharmProjects/Unic_NPLProject/totalWor
 
 modelM = Model(pathModel, True)
 
-f = 'Ciao, come stap'
+f = 'io nin ho caprto'
 
 print(f)
 

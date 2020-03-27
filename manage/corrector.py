@@ -18,7 +18,7 @@ def checkSentence(pathFile, sentence, model):
                 print('\nbad:' + word)
                 possibleWords = model.predict(listPrevious, topn=30)
                 (list(map(lambda x: possibleWordsList.append(x[0]), possibleWords)))
-                print(getDistanceLevenshtein(word, possibleWords))
+                print(getDistanceLevenshtein(word, possibleWordsList))
             else:
                 listPrevious.append(word)
 """
