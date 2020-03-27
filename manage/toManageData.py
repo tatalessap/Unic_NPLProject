@@ -1,6 +1,7 @@
 from manage.utilis import *
 import collections
 import json
+import Levenshtein
 
 """
 by https://nlp.stanford.edu/IR-book/html/htmledition/edit-distance-1.html
@@ -23,7 +24,6 @@ def distanceLevenshtein(string1, string2):
                distanceLevenshtein(string1, string2[:-1]) + 1,
                distanceLevenshtein(string1[:-1], string2[:-1]) + cost])
 
-
     return res
 
 
@@ -33,21 +33,24 @@ Create the similarity matrix by list and word
 def getdistanceLevenshtein(word, listEl):
     minDistance = 100
     minWords = []
-
+    minDistances = []
     for el in listEl:
+        d = Levenshtein.distance(str(word), str(el))
+        if d < minDistance:
+            minDistance = d
+            minWord = el
+        if d == minDistance:
+            minWords.append(str(el))
+            minDistances.append(d)
 
-        if word[0] == el[0]:
-            d = distanceLevenshtein(el, word)
-            if d < minDistance:
-                minDistance = d
-                minWord = el
-            if d == minDistance:
-                minWords.append(el)
+    print(minDistances)
 
     return minWords
 
-""
-def createFileJson(list, nameJson):
+"""
+Create file json with len-key
+"""
+def createFileJsonByLen(list, nameJson):
     data = {}
 
     for el in list:
@@ -56,6 +59,7 @@ def createFileJson(list, nameJson):
                 data[len(el)] = [el.lower()]
             else:
                 data.get(len(el)).append(el.lower())
+
     sortedSavedJson(data, nameJson)
 
 ""
@@ -68,7 +72,7 @@ def sortedSavedJson(data, nameJson):
 ""
 def createListBadWords(path, nameFileMessages, nameFile):
     key = "bad"
-    badWords = {key : []}
+    badWords = {key: []}
 
     with open(path + nameFileMessages) as f:
         dataMessages = json.load(f)
