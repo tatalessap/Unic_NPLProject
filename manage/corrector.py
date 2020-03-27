@@ -1,28 +1,24 @@
 from manage.toManageData import *
-from manage.toCreateSetWords import *
 from manage.wordEmbeddings import *
-import Levenshtein
 
 """
 """
-
-
-def checkSentence(path, nameFile, sentence, model):
+def checkSentence(pathFile, sentence, model):
     sentenceList = splitSentence(sentence)
 
     listPrevious = []
     possibleWordsList = []
 
-    with open(path + nameFile) as f:
+    with open(pathFile) as f:
         dataFile = json.load(f)
 
     for word in sentenceList:
         if str(len(word)) in dataFile.keys():
             if word not in dataFile.get(str(len(word))):
                 print('\nbad:' + word)
-                possibleWords = model.predict(listPrevious, topn=10)
+                possibleWords = model.predict(listPrevious, topn=30)
                 (list(map(lambda x: possibleWordsList.append(x[0]), possibleWords)))
-                print(getdistanceLevenshtein(word, possibleWordsList))
+                print(getDistanceLevenshtein(word, possibleWords))
             else:
                 listPrevious.append(word)
 """
