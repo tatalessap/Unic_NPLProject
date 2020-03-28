@@ -7,17 +7,18 @@ pathModel = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/marta.model
 
 pathFile = '/home/tatalessap/PycharmProjects/Unic_NPLProject/totalWords.json'
 
-if not os.path.isfile('/home/tatalessap/PycharmProjects/Unic_NPLProject/totalWords.json'):
+if not os.path.isfile(pathFile):
     createFiles()
 
 modelM = Model(pathModel, True)
 
-f = 'io nin ho caprto'
+f = 'Ciao, non cipito perché non mi ripondi'
 
 print(f)
 
 checkSentence(pathFile, f, modelM)
 
+dct = {'ciao': 1, 'ciauP' : 4, 'uncis': 4}
 
 
 

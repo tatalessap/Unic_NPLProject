@@ -38,3 +38,11 @@ def createDocWordsText(nameFileText):
     words.close()
 
     return list
+
+def extractListByDic(dic, min):
+    listD = []
+    for k in dic.keys():
+        if dic[k] <= min:
+            listD.append(k)
+
+    return listD

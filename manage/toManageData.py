@@ -12,18 +12,21 @@ import json
 Create the similarity matrix by list and word
 """
 def getDistanceLevenshtein(word, listEl):
-    minDistance = []
+    lenDis = {}
     minWords = []
+    minDist = 1000
 
     for el in listEl:
         d = Levenshtein.distance(str(word), str(el))
-        if d < 3:
-            minDistance.append(d)
-            minWords.append(el)
+        lenDis[el] = d
 
-    print(minDistance)
+        if minDist > d:
+            minDist = d
+
+    minWords = extractListByDic(lenDis, minDist)
 
     return minWords
+
 
 """
 Create data with len-key
