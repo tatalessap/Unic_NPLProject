@@ -3,7 +3,7 @@ from manage.wordEmbeddings import *
 from createFiles import createFiles
 import os
 
-pathModel = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/marta.model'
+pathModel = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/martaWiki.model'
 
 pathFile = '/home/tatalessap/PycharmProjects/Unic_NPLProject/totalWords.json'
 
@@ -12,15 +12,12 @@ if not os.path.isfile(pathFile):
 
 modelM = Model(pathModel, True)
 
-f = 'Ciao, non cipito perché non mi ripondi'
+f = 'Hai finito di studiort?'
 
 print(f)
 
-checkSentence(pathFile, f, modelM)
+print("uno")
 
-dct = {'ciao': 1, 'ciauP' : 4, 'uncis': 4}
+sentenceList = checkSentence2(pathFile, f, modelM, softness=0)
 
-
-
-
-
+modelM.trainMoreSentence(sentenceList)

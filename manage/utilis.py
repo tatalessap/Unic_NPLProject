@@ -46,3 +46,11 @@ def extractListByDic(dic, min):
             listD.append(k)
 
     return listD
+
+def getSentence(sentenceList):
+    sentence = ""
+
+    for word in sentenceList:
+        sentence = sentence + " " + word
+
+    return sentence

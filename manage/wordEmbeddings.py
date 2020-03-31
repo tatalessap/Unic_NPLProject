@@ -31,7 +31,6 @@ class Model:
         return model
 
     def predict(self, listOfWord, probability=0, topn=30):
-
         predict = self.model.predict_output_word(listOfWord, topn=topn)
         return list(filter(lambda x: x[1] > probability, predict))
 
@@ -39,10 +38,12 @@ class Model:
         sentences = Text8Corpus(datapath(pathCorpus))
         self.model.train(sentences, epochs=epochs, total_examples=self.model.corpus_count, compute_loss=compute_loss)
 
+    def trainMoreSentence(self, moreSentence, epochs=60, compute_loss=True):
+        self.model.build_vocab(moreSentence, update=True)
+        self.model.train(moreSentence, epochs=epochs, total_examples=self.model.corpus_count, compute_loss=compute_loss)
+
 
 """funzioni utili"""
-
-
 def cleanTextBadWord(text, key, badWord):
     """pulizia messaggi da file json passando il file json dei messaggi, la chiave su cui cercare
     e il file json della badWord"""
