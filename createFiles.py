@@ -23,7 +23,7 @@ def createFiles():
 
     user1 = 'Tata'
 
-    user2 = 'Stefano Raimondo Usa'
+    user2 = 'Stefano Usai'
 
     listToEliminateSymbols = ['http', '/', '-', '😂', '\'', 'è', 'à', 'ù', 'ò']
 
@@ -46,13 +46,13 @@ def createFiles():
 
             sortedSavedJson(dataWordsByMessages, nameFileMessagesJson)
 
-            #dataWordsByWiki = createDataByLen(extractWordsByJson(pathGeneral+folderWords+nameFileWiki)) #data by wikipedia
+            dataWordsByWiki = createDataByLen(extractWordsByJson(pathGeneral+folderWords+nameFileWiki)) #data by wikipedia
 
             dataWordsByCommon = createDataByLen(createDocWordsText(pathGeneral+folderWords+nameFileWordsCommon)) #data by common words
 
-            #dataWordsByUnion = unionDataByData(dataWordsByWiki, dataWordsByCommon)
+            dataWordsByUnion = unionDataByData(dataWordsByWiki, dataWordsByCommon)
 
-            dataWordsByUnion = dataWordsByCommon
+            #dataWordsByUnion = dataWordsByCommon
 
             sortedSavedJson(dataWordsByUnion, nameFileTotal)
 

@@ -7,8 +7,7 @@ from gensim.models.word2vec import Word2Vec, Text8Corpus
 import json
 import logging
 
-
-class Model:
+class ModelWord2Vec:
     """path è la stringa che indica o il corpus su cui lavorare o il modello da caricare """
 
     def __init__(self, path, existModel=False):
@@ -77,3 +76,5 @@ def createCorpusFromCleanText(clean_text, name='clean_text.txt'):
     with open(name, 'w') as f:
         for m in clean_text:
             f.writelines(m)
+
+

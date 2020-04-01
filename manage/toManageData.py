@@ -8,6 +8,7 @@ import re
 import string
 import json
 
+
 """
 Create the similarity matrix by list and word
 """
@@ -100,6 +101,7 @@ def createDocWords(nameFileText, user1, user2):
     setWords = {user1: [], user2: []}
     messagesFile = open(nameFileText, "r")
     messagesFun = messagesFile.readlines()
+    sentenceFile = open("sentenceMessages.txt", "w")
     flag = 2
     for line in messagesFun:
         if user1 in line:
@@ -111,6 +113,7 @@ def createDocWords(nameFileText, user1, user2):
                 #separate the message of user1 and user2
                 if flag == 0:
                     setWords.get(user1).append(line)
+                    sentenceFile.write(line + "\n")
                 if flag == 1:
                     setWords.get(user2).append(line)
     messagesFile.close()
