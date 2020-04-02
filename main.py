@@ -1,66 +1,41 @@
+from manage.corrector import *
+from manage.wordEmbeddingsWord2Vec import *
+from manage.wordEmbeddingsFastText import *
+from createFiles import createFiles
 import os
-import json
-from manage.toCreateSetWords import *
-from manage.toManageData import *
 
+#
+import nltk
+from pprint import pprint as print
+from gensim.models.fasttext import FastText as FT_gensim
+from gensim.test.utils import datapath
+import numpy as np
+import logging
 
-"""
-Input to set, variables and name of files
-"""
-#list of messages, for example messages2.html
-path = '/home/tatalessap/PycharmProjects/NPLProject/'
+#logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+#
 
-pathMessages = 'Files'
+pathTrain = '/home/tatalessap/PycharmProjects/Unic_NPLProject/sentenceMessages.txt'
 
-messages = os.listdir(path+pathMessages)
+pathModelW = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/WikiModelmono1epochS2.model'
 
-nameFileWiki = "documents2.json"
+pathModelF = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/2/WikiFast1bis.model'
 
-user1 = 'Tata'
+pathFile = '/home/tatalessap/PycharmProjects/Unic_NPLProject/totalWords.json'
 
-user2 = 'Stefano Raimondo Usa'
+if not os.path.isfile(pathFile):
+    createFiles()
 
-nameFileOutput = "Output.txt"
+modelF = ModelFastText(pathModelF, True)
 
-nameFileWordsCommon = "60000_parole_italiane.txt"
+modelW = ModelWord2Vec(pathModelW, True)
 
-nameFileMessagesJson = 'wordsByLen.json'
+f = 'per crsare questi messaggi non sto guardando lo schermo non ho idea di cosa sto scrivndo pernso di aver sbagliato qualche lettera'
 
-nameFileWordsCommonJson = 'wordsByLenCommon.json'
+print(f)
 
-nameFileWikiJson = 'wordsByLenWiki.json'
+badWords, goodWords = checkSentence(pathFile, f)
 
-nameFileTotal = "totalWords.json"
+print(getPossibleWords(modelW.predict, badWords, goodWords, "w2v"))
 
-listToEliminateSymbols = ['http', '/', '-', '😂', '\'', 'è', 'à', 'ù', 'ò']
-
-#create a set by conversation by telegram
-if not os.path.isfile(path+nameFileOutput):
-    createFileWords(messages, path+pathMessages, nameFileOutput)
-#create the doc
-setWords = createDocWords(nameFileOutput, user1, user2)
-#create a list by user (list of words)
-clearList = createClearList(setWords.get(user1), listToEliminateSymbols)
-
-if not os.path.isfile(path+nameFileTotal):
-    # if not exist, create a json with words order by their length
-    if not os.path.isfile(path + nameFileMessagesJson):
-        createFileJson(clearList, nameFileMessagesJson)
-
-    if not os.path.isfile(path + nameFileWikiJson):
-        createFileJson(extractWordsByJson(path+nameFileWiki), nameFileWikiJson)
-
-    if not os.path.isfile(path + nameFileWordsCommonJson):
-        createFileJson(createDocWordsText(path + nameFileWordsCommon), nameFileWordsCommonJson)
-        sortedSavedJson(unionFileJson(path+nameFileWikiJson, path + nameFileWordsCommonJson), nameFileTotal)
-
-createListBadWords(path, nameFileMessagesJson, nameFileTotal)
-
-#createSetNotCorrectWords(path, nameFileMessagesJson, 'wordsByLenWiki.json')
-
-
-
-
-
-
-
+print(getPossibleWords(modelF.getSimilar, badWords, [], "ft"))

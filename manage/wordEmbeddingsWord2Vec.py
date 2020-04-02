@@ -7,8 +7,7 @@ from gensim.models.word2vec import Word2Vec, Text8Corpus
 import json
 import logging
 
-
-class Model:
+class ModelWord2Vec:
     """path è la stringa che indica o il corpus su cui lavorare o il modello da caricare """
 
     def __init__(self, path, existModel=False):
@@ -30,8 +29,7 @@ class Model:
                          negative=negative)
         return model
 
-    def predict(self, listOfWord, probability=0, topn=30):
-
+    def predict(self, listOfWord, probability=0, topn=50):
         predict = self.model.predict_output_word(listOfWord, topn=topn)
         return list(filter(lambda x: x[1] > probability, predict))
 
@@ -39,10 +37,12 @@ class Model:
         sentences = Text8Corpus(datapath(pathCorpus))
         self.model.train(sentences, epochs=epochs, total_examples=self.model.corpus_count, compute_loss=compute_loss)
 
+    def trainMoreSentence(self, moreSentence, epochs=60, compute_loss=True):
+        self.model.build_vocab(moreSentence, update=True)
+        self.model.train(moreSentence, epochs=epochs, total_examples=self.model.corpus_count, compute_loss=compute_loss)
+
 
 """funzioni utili"""
-
-
 def cleanTextBadWord(text, key, badWord):
     """pulizia messaggi da file json passando il file json dei messaggi, la chiave su cui cercare
     e il file json della badWord"""
@@ -76,3 +76,5 @@ def createCorpusFromCleanText(clean_text, name='clean_text.txt'):
     with open(name, 'w') as f:
         for m in clean_text:
             f.writelines(m)
+
+
