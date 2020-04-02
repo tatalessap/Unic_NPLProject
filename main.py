@@ -12,34 +12,30 @@ from gensim.test.utils import datapath
 import numpy as np
 import logging
 
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+#logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 #
 
-#pathModelW = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/martaWiki.model'
+pathTrain = '/home/tatalessap/PycharmProjects/Unic_NPLProject/sentenceMessages.txt'
 
-pathModelF = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/1/WikiFast1.model'
+pathModelW = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/WikiModelmono1epochS2.model'
+
+pathModelF = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/2/WikiFast1bis.model'
 
 pathFile = '/home/tatalessap/PycharmProjects/Unic_NPLProject/totalWords.json'
 
 if not os.path.isfile(pathFile):
     createFiles()
 
-modelF = FT_gensim.load(pathModelF)
+modelF = ModelFastText(pathModelF, True)
 
-sentences = datapath('/home/tatalessap/PycharmProjects/Unic_NPLProject/sentenceMessages.txt')
+modelW = ModelWord2Vec(pathModelW, True)
 
-modelF.train(sentences, epochs=5, total_examples=modelF.corpus_count, compute_loss=False)
-
-f = 'Hai finito di studiort?'
+f = 'per crsare questi messaggi non sto guardando lo schermo non ho idea di cosa sto scrivndo pernso di aver sbagliato qualche lettera'
 
 print(f)
 
 badWords, goodWords = checkSentence(pathFile, f)
 
-#getPossibleWordsByContext(modelW, badWords, goodWords)
+print(getPossibleWords(modelW.predict, badWords, goodWords, "w2v"))
 
-getPossibleWordBySimilar(modelF, badWords)
-
-
-
-
+print(getPossibleWords(modelF.getSimilar, badWords, [], "ft"))

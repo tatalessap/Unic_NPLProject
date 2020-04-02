@@ -29,7 +29,7 @@ class ModelWord2Vec:
                          negative=negative)
         return model
 
-    def predict(self, listOfWord, probability=0, topn=30):
+    def predict(self, listOfWord, probability=0, topn=50):
         predict = self.model.predict_output_word(listOfWord, topn=topn)
         return list(filter(lambda x: x[1] > probability, predict))
 
