@@ -173,3 +173,40 @@ def extractWordsByJson(path):
 
 
 
+def spellcheckerBaseLine(word, words_index, ntop=3):
+    """ Restituisce i suggerimenti delle parole in base allo spellchecker creato da M.Atzori """
+    from manage import ngramspell
+    res = {
+        "word": word,
+        "suggestions":[ {w: {'score':score,'edit':edit}} for w, score, edit in ngramspell.similar2(words_index, word)[:ntop] ]
+    }
+    return res
+
+def csvBaseLine(listBadWord, path_dizionario='', ntop=3, save = False, name='baseline.csv'):
+    """creazione di un dataframe in formato csv, basato sullo spellchecker creato da M.Atzori"""
+    from manage import ngramspell
+    import pandas as pd
+    words_index = ngramspell.index(path_dizionario)
+    data_list = []
+    for i in range(ntop):
+        data_list.append([])
+
+    for word in listBadWord:
+        tmp = spellcheckerBaseLine(word, words_index, ntop)
+
+        for i, k in enumerate(data_list):
+            try:
+                data_list[i].append(list(tmp['suggestions'][i].keys())[0])
+            except IndexError:
+                data_list[i].append('NaN')
+
+    data = {'BadWord': listBadWord}
+
+    for i, k in enumerate(data_list):
+        data[f'Res_{i}'] = k
+
+    df = pd.DataFrame(data)
+
+    df.to_csv(name)
+
+    return df,data_list
