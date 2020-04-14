@@ -10,6 +10,7 @@ some in a sentence.
 def checkSentence(pathFile, sentence):
     goodWords = []
     badWords = []
+
     sentenceList = splitSentence(sentence) #split sentence, no special character
 
     with open(pathFile, encoding='utf-8') as f:
@@ -31,25 +32,20 @@ For each bad word, print a list of possible substitute by method of the model
 ft --> fast text
 w2v --> word2vect
 """
-def getPossibleWords(getAlternative, badWords, goodWords, nameModel):
-    possibleWords = {}
+def getPossibleWords(getAlternative, badWord, goodWords, nameModel):
 
-    for word in badWords:
-
-        print("Bad Word: " +word)
-
-        if nameModel == "ft":
-            possibleWords = getAlternative(word)
-        elif nameModel == "w2v":
-            possibleWords = getAlternative(goodWords)
+    if nameModel == "ft":
+        possibleWords = getAlternative(badWord)
+    elif nameModel == "w2v":
+        if goodWords == []:
+            return []
         else:
-            return "Problems with label-model"
+            possibleWords = getAlternative(goodWords)
+    else:
+        return []
 
-        #print(possibleWords)
-        print(spellChecker(word, possibleWords))
+    return spellChecker(badWord, possibleWords)
 
-    #finish spell checker
-    return "Done!"
 
 
 def spellChecker(word, possibleWords):

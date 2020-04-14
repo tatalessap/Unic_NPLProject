@@ -14,8 +14,8 @@ def createFiles():
     nameFileWiki = "documents2.json"
 
     nameFileOutputByMessages = "allMessages.txt"
-# /home/tatalessap/PycharmProjects/Unic_NPLProject/wordFiles/660000_parole_italiane.txt
-    nameFileWordsCommon = '660000_parole_italiane.txt'
+
+    nameFileWordsCommon = 'dizionario.txt'
 
     nameFileMessagesJson = 'wordsMessagesByLen.json'
 
@@ -46,13 +46,13 @@ def createFiles():
 
             sortedSavedJson(dataWordsByMessages, nameFileMessagesJson)
 
-            dataWordsByWiki = createDataByLen(extractWordsByJson(pathGeneral+folderWords+nameFileWiki)) #data by wikipedia
+            #dataWordsByWiki = createDataByLen(extractWordsByJson(pathGeneral+folderWords+nameFileWiki)) #data by wikipedia
 
             dataWordsByCommon = createDataByLen(createDocWordsText(pathGeneral+folderWords+nameFileWordsCommon)) #data by common words
 
-            dataWordsByUnion = unionDataByData(dataWordsByWiki, dataWordsByCommon)
+            #dataWordsByUnion = unionDataByData(dataWordsByWiki, dataWordsByCommon)
 
-            #dataWordsByUnion = dataWordsByCommon
+            dataWordsByUnion = dataWordsByCommon
 
             sortedSavedJson(dataWordsByUnion, nameFileTotal)
 

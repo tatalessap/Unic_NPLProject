@@ -1,9 +1,9 @@
 from manage.utilis import *
+from manage.utilis import *
 import collections
 import json
 import Levenshtein
 from bs4 import BeautifulSoup
-from manage.utilis import *
 import re
 import string
 import json

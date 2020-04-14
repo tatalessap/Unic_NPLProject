@@ -63,11 +63,22 @@ def getSentence(sentenceList):
 
 
 def splitSentence(sentence):
+    if sentence[-1] == '\n':
+        sentence = sentence[:-1]
+
     remove = string.punctuation
     pattern = r"[{}]".format(remove)  # create the pattern
 
-    sentenceList = re.sub(pattern, "", str(sentence))
+    sentenceList = re.sub(pattern, " ", str(sentence))
     sentenceList = re.split(' ', sentenceList)
     sentenceList = list(map(lambda x: x.lower(), sentenceList))
 
     return sentenceList
+
+def getStringByList(list):
+    megaString = ''
+
+    for el in list:
+        megaString = megaString + str(el)
+
+    return megaString
