@@ -37,7 +37,7 @@ def getPossibleWords(getAlternative, badWord, goodWords, nameModel):
     if nameModel == "ft":
         possibleWords = getAlternative(badWord)
     elif nameModel == "w2v":
-        if goodWords == [] or m:
+        if goodWords == []:
             return []
         else:
             possibleWords = getAlternative(goodWords)
