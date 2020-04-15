@@ -13,12 +13,12 @@ def checkSentence(pathFile, sentence):
 
     sentenceList = splitSentence(sentence) #split sentence, no special character
 
-    with open(pathFile, encoding='utf-8') as f:
+    with open(pathFile) as f:
         setDictionary = json.load(f)  # dic
 
     for word in sentenceList:
         if str(len(word)) in setDictionary.keys():
-            if word not in setDictionary.get(str(len(word))):
+            if word not in setDictionary.get(str(len(word))) and word!=' ':
                 badWords.append(word)
             else:
                 goodWords.append(word)
@@ -37,7 +37,7 @@ def getPossibleWords(getAlternative, badWord, goodWords, nameModel):
     if nameModel == "ft":
         possibleWords = getAlternative(badWord)
     elif nameModel == "w2v":
-        if goodWords == []:
+        if goodWords == [] or m:
             return []
         else:
             possibleWords = getAlternative(goodWords)

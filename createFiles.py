@@ -15,7 +15,8 @@ def createFiles():
 
     nameFileOutputByMessages = "allMessages.txt"
 
-    nameFileWordsCommon = 'dizionario.txt'
+
+    nameFileWordsCommon = '660000_parole_italiane.txt'
 
     nameFileMessagesJson = 'wordsMessagesByLen.json'
 
@@ -32,10 +33,12 @@ def createFiles():
 
     # create a set-words by conversation by telegram
     if not os.path.isfile(pathGeneral+nameFileTotal):
-        createFileWords(messages, pathGeneral+folderMessages, nameFileOutputByMessages)
 
         # create the doc
-        setWords = createDocWords(nameFileOutputByMessages, user1, user2)
+        setWords = createDocWords(messages, pathGeneral+folderMessages, user1, user2)
+
+        with open("setMessages.json", "w") as outfile:
+            json.dump(setWords, outfile)
 
         # create a list by user (list of words)
         clearList = createClearList(setWords.get(user1), listToEliminateSymbols)
@@ -46,13 +49,13 @@ def createFiles():
 
             sortedSavedJson(dataWordsByMessages, nameFileMessagesJson)
 
-            #dataWordsByWiki = createDataByLen(extractWordsByJson(pathGeneral+folderWords+nameFileWiki)) #data by wikipedia
+            dataWordsByWiki = createDataByLen(extractWordsByJson(pathGeneral+folderWords+nameFileWiki)) #data by wikipedia
 
             dataWordsByCommon = createDataByLen(createDocWordsText(pathGeneral+folderWords+nameFileWordsCommon)) #data by common words
 
-            #dataWordsByUnion = unionDataByData(dataWordsByWiki, dataWordsByCommon)
+            dataWordsByUnion = unionDataByData(dataWordsByWiki, dataWordsByCommon)
 
-            dataWordsByUnion = dataWordsByCommon
+            #dataWordsByUnion = dataWordsByCommon
 
             sortedSavedJson(dataWordsByUnion, nameFileTotal)
 

@@ -30,8 +30,15 @@ class ModelWord2Vec:
         return model
 
     def predict(self, listOfWord, probability=0, topn=50):
-        predict = self.model.predict_output_word(listOfWord, topn=topn)
-        return list(filter(lambda x: x[1] > probability, predict))
+        listOfWord = self.checkList(listOfWord)
+        if listOfWord == []:
+            return []
+        else:
+            predict = self.model.predict_output_word(listOfWord, topn=topn)
+            return list(filter(lambda x: x[1] > probability, predict))
+
+
+
 
     def train(self, pathCorpus, epochs=60, compute_loss=True):
         sentences = Text8Corpus(datapath(pathCorpus))
@@ -40,6 +47,14 @@ class ModelWord2Vec:
     def trainMoreSentence(self, moreSentence, epochs=60, compute_loss=True):
         self.model.build_vocab(moreSentence, update=True)
         self.model.train(moreSentence, epochs=epochs, total_examples=self.model.corpus_count, compute_loss=compute_loss)
+
+    def checkList(self, listGoodW):
+        newList = []
+        for el in listGoodW:
+            if el in list(self.model.wv.vocab.keys()):
+                newList.append(el)
+
+        return newList
 
 
 """funzioni utili"""
