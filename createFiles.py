@@ -5,7 +5,7 @@ def createFiles():
     """
     Input to set, variables and name of files
     """
-    pathGeneral = '/home/tatalessap/PycharmProjects/Unic_NPLProject/'
+    pathGeneral = ''
 
     folderWords = 'wordFiles/'
 
@@ -13,18 +13,15 @@ def createFiles():
 
     nameFileWiki = "documents2.json"
 
-    nameFileOutputByMessages = "allMessages.txt"
-
-
     nameFileWordsCommon = '660000_parole_italiane.txt'
 
     nameFileMessagesJson = 'wordsMessagesByLen.json'
 
     nameFileTotal = 'totalWords.json'
 
-    user1 = 'Tata'
+    user1 = ''  #insert name of utent in the messages
 
-    user2 = 'Stefano Usai'
+    user2 = ''
 
     listToEliminateSymbols = ['http', '/', '-', '😂', '\'', 'è', 'à', 'ù', 'ò']
 
@@ -54,8 +51,6 @@ def createFiles():
             dataWordsByCommon = createDataByLen(createDocWordsText(pathGeneral+folderWords+nameFileWordsCommon)) #data by common words
 
             dataWordsByUnion = unionDataByData(dataWordsByWiki, dataWordsByCommon)
-
-            #dataWordsByUnion = dataWordsByCommon
 
             sortedSavedJson(dataWordsByUnion, nameFileTotal)
 

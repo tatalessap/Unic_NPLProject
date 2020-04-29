@@ -4,8 +4,9 @@ from manage.wordEmbeddingsFastText import *
 import operator
 
 """
-With a dictionary, this method check a sentence, and return a list of good words and a list of bad words, if there are 
-some in a sentence.
+check if there are wrong words in the sentence. 
+pathFile is the path where the dictionary is located. 
+sentence, on the other hand, is the list of messages to check.
 """
 def checkSentence(pathFile, sentence):
     goodWords = []
@@ -25,12 +26,29 @@ def checkSentence(pathFile, sentence):
 
     return badWords, goodWords
 
+"""
+creates a list of correct words within the sentence
+"""
+def getGoodWord(pathFile, sentence):
+    goodWords = []
+
+    sentenceList = splitSentence(sentence) #split sentence, no special character
+
+    with open(pathFile) as f:
+        setDictionary = json.load(f)  # dic
+
+    for word in sentenceList:
+        if str(len(word)) in setDictionary.keys():
+            if word in setDictionary.get(str(len(word))) and word != ' ':
+                goodWords.append(word)
+
+    return goodWords
+
 
 """
-@:parameter getAlternative: the method of the model dedicate to give a list of possible words to substitute a bad word
-For each bad word, print a list of possible substitute by method of the model
-ft --> fast text
-w2v --> word2vect
+getAlternative is the function to use depending on the model, 
+badWord is the word, 
+goodWords serves in case you are using word2vect, nameModel is a flag to know how to use getAlternative
 """
 def getPossibleWords(getAlternative, badWord, goodWords, nameModel):
 
@@ -47,7 +65,9 @@ def getPossibleWords(getAlternative, badWord, goodWords, nameModel):
     return spellChecker(badWord, possibleWords)
 
 
-
+"""
+returns the list of possible words sorted in descending order according to the score
+"""
 def spellChecker(word, possibleWords):
     result = {}
     for el in possibleWords:
@@ -56,23 +76,24 @@ def spellChecker(word, possibleWords):
 
     result = sorted(result.items(), reverse=True, key=lambda x: x[1])
 
-    #print(result)
-
     return result[:7]
 
-
+"""
+returns the score
+"""
 def getPossibleElement(word, possibleWord, similarity, constant=0.5):
     score = 0
     if len(possibleWord) > 2:
         if similarity > constant:
-            if len(word) == len(possibleWord):
-                score = score + 1
-            if word[0] == possibleWord[0]:
-                score = score + 2
-            if word[len(word)-1] == possibleWord[len(possibleWord)-1]:
-                score = score + 2
-            if Levenshtein.distance(word, possibleWord) < 1:
-                score = score + 5
-            elif Levenshtein.distance(word, possibleWord) < 4:
-                score = score + 3
+            score = score + 2
+        if len(word) == len(possibleWord):
+            score = score + 1
+        if word[0] == possibleWord[0]:
+            score = score + 2
+        if word[len(word)-1] == possibleWord[len(possibleWord)-1]:
+            score = score + 2
+        if Levenshtein.distance(word, possibleWord) < 1:
+            score = score + 5
+        elif Levenshtein.distance(word, possibleWord) < 4:
+            score = score + 3
     return score

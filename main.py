@@ -5,101 +5,147 @@ from createFiles import createFiles
 import os
 import pandas as pd
 import numpy as np
+"""
+call of the main methods and comparison with the two models
+"""
 
+pathTrain = ''
 
-#logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-#
+pathModelW = ''
 
-pathTrain = '/home/tatalessap/PycharmProjects/Unic_NPLProject/sentenceMessages.txt'
+pathModelF = ''
 
-pathModelW = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/W2CWikiITa2019ep5dim300neg10/WikiW2C300neg10ep5.model'
-
-#pathModelF = '/home/tatalessap/PycharmProjects/Unic_NPLProject/models/FastTextWikiITa2019ep5dim300neg10/WikiFT300neg10ep5.model'
-
-pathFile = '/home/tatalessap/PycharmProjects/Unic_NPLProject/totalWords.json'
+pathFile = ''
 
 if not os.path.isfile(pathFile):
-    createFiles()
+    createFiles() #create the necessary files, set of messages and dictionary
 
-#modelF = ModelFastText(pathModelF, True)
+
+if not os.path.isfile('not_filtered.csv'): #if not are the list of bad sentence, create one with
+        d = {'sentence': [], 'bad word': []} #the sentence and the bad words
+
+        count = 0
+
+        setNotBadWords = []
+
+        flag = True
+
+        with open("/home/tatalessap/PycharmProjects/Unic_NPLProject/setMessages.json") as js: #open a list of sentence by utent
+
+            jListM = json.load(js)
+
+            listM = jListM.get('') #insert utent name
+
+            for line in listM:
+
+                if flag:
+
+                    if((line != "\n") and (line != "     \n")) and (len(line) > 5 and len(line)< 50) and 'www' not in line:
+
+                        badWords, goodWords = checkSentence(pathFile, line)
+
+                        if badWords != []:
+
+                            for el in badWords:
+
+                                if (el not in setNotBadWords) and (len(el) > 4) and ('ah'not in el and 'eh' not in el and 'mmh' not in el):
+                                    count = count + 1
+                                    print("badwords    " + el)
+
+                                    d.get('sentence').append(line)
+
+                                    d.get('bad word').append(el)
+
+                                    if count == 300:
+                                        flag = False
+
+
+        df = pd.DataFrame(data=d)
+
+        df.to_csv('not_filtered.csv')
+
+#filtered the sentence and add a new coloumn with the correct words.
+
+df = pd.read_csv('filtered.csv') #this file was done externally to the code
+
+listS = df.get('sentence')
+
+listBW = df.get('bad word')
+
+listCW = (df.get('Unnamed: 3')) #column of correct words
+
+
+#word2vect
+
+if not os.path.isfile('docW2V.csv'):
+
+    d = {'sentence': [], 'bad word': [], 'correct word': [], 'word2vect': [], 'w2v': []}
+
+    modelW = ModelWord2Vec(pathModelW, True)
+    print('modelw')
+
+    ind = 0
+
+    for b in listBW:
+
+        d.get('sentence').append(listS.get(ind))
+
+        d.get('bad word').append(b)
+
+        d.get('correct word').append(listCW.get(ind))
+
+        goodWords = getGoodWord(pathFile, listS.get(ind))
+
+        pw = getPossibleWords(modelW.predict, str(b), goodWords, "w2v")
+
+        if listCW.get(ind) in (list(map(lambda x: x[0], pw))):
+
+            d.get('w2v').append(1)
+        else:
+            d.get('w2v').append(0)
+
+        d.get('word2vect').append(getStringByList(pw))
+
+        pw.clear()
+
+        ind = ind + 1
+
+    df = pd.DataFrame(data=d)
+
+    df.to_csv('docW2V.csv')
+
+###
+d = {'fasttext': [], 'ft': []}
+
+modelF = ModelFastText(pathModelF, True)
 
 print('modelf')
 
-modelW = ModelWord2Vec(pathModelW, True)
-print('modelw')
+ind = 0
+d = {'fasttext': [], 'ft': []}
 
-"""
-sentence | bad word | correct word | baseline word | fasttext word | w2v word | chech correct word baseline | check correct word fasttext | check correct word word2vect
-"""
-#d = {'sentence': [], 'bad word': [], 'correct word': [], 'baseline': [], 'fasttext': [], 'word2vect': [], 'b': [], 'f': [], 'w2v': []}
+modelF = ModelFastText(pathModelF, True)
 
-d = {'sentence': [], 'bad word': [], 'correct word': [], 'word2vect': [], 'w2v': []}
+print('modelf')
 
-setNotBadWords = []
+ind = 0
 
-with open("/home/tatalessap/PycharmProjects/Unic_NPLProject/sentenceMessages.txt") as file_in:
-    bwords = open("BadWordaForBaseline.txt", "w")
-    cwords = open("correction.txt", "w")
+for b in listBW:
 
+    pw = getPossibleWords(modelF.getSimilar, str(b), b, "ft")
 
-    for line in file_in:
+    if listCW.get(ind) in (list(map(lambda x: x[0], pw))):
+        d.get('ft').append(1)
+    else:
+        d.get('ft').append(0)
 
-        if((line != "\n") and (line != "     \n")) and len(line) > 5:
+    d.get('fasttext').append(getStringByList(pw))
 
-            badWords, goodWords = checkSentence(pathFile, line)
+    pw.clear()
 
-            if badWords != []:
-
-                print("sentence:    " + line)
-
-                for el in badWords:
-
-                    if el not in setNotBadWords and el[0] != 'C:':
-
-                        print("badwords    " + el)
-
-                        # insert correct word
-                        test4word = input("Insert correct word: ")
-
-                        print(len(test4word))
-
-                        if len(test4word) != 0 and len(test4word) != 1:
-                            bwords.write(el + "\n")
-
-                            cwords.write(test4word + "\n")
-
-                            d.get('correct word').append(str(test4word))
-
-                            d.get('sentence').append(line)
-
-                            d.get('bad word').append(el)
-
-                            pw = getPossibleWords(modelW.predict, str(el), goodWords, "w2v")
-
-                            d.get('word2vect').append(getStringByList(pw))
-
-                                #check if the word correct is in the list
-
-                            d.get('w2v').append(test4word in pw)
-
-                            pw.clear()
-
-                            #pw = getPossibleWords(modelF.getSimilar, str(el), [], "ft")
-
-                            #d.get('fasttext').append(getStringByList(pw))
-
-                                # check if the word correct is in the list
-                            #d.get('f').append(test4word in pw)
-                        else:
-                            setNotBadWords.append(el)
-bwords.close()
-
-cwords.close()
+    ind = ind + 1
 
 df = pd.DataFrame(data=d)
 
-df.to_csv('prova1.csv')
-
-
-
+df.to_csv('docFT.csv')
 

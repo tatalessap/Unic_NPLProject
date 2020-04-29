@@ -75,6 +75,7 @@ def splitSentence(sentence):
 
     return sentenceList
 
+
 def getStringByList(list):
     megaString = ''
 

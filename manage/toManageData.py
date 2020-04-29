@@ -152,7 +152,6 @@ def extractWordsByJson(path):
     return listWords
 
 
-
 def spellcheckerBaseLine(word, words_index, ntop=3):
     """ Restituisce i suggerimenti delle parole in base allo spellchecker creato da M.Atzori """
     from manage import ngramspell
@@ -161,6 +160,7 @@ def spellcheckerBaseLine(word, words_index, ntop=3):
         "suggestions":[ {w: {'score':score,'edit':edit}} for w, score, edit in ngramspell.similar2(words_index, word)[:ntop] ]
     }
     return res
+
 
 def csvBaseLine(listBadWord, path_dizionario='', ntop=3, save = False, name='baseline.csv'):
     """creazione di un dataframe in formato csv, basato sullo spellchecker creato da M.Atzori"""
